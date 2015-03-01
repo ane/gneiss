@@ -7,6 +7,6 @@
   [& args]
   (println (str "I'm in " (System/getProperty "user.dir")))
   (println "Getting some chunks!")
-  (map chunks/size args))
+  (map chunks/kakkapaska args))
 
 
