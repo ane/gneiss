@@ -13,7 +13,7 @@
   [reg]
   (fn [line]
     (if-let [[_ nick msg] (reg line)]
-      {:nick nick :words (frequencies (clojure.string/split msg #"\s"))}
+      {:nick nick :words (count (clojure.string/split msg #"\s"))}
       :nothing)))
 
 (defn make-matcher
