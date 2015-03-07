@@ -1,6 +1,11 @@
 (ns gneiss.core
-  (require [clojure.java.io :as io]
-           [gneiss.chunks :as chunks]))
+  (:require [gneiss.analyze :as anal]
+            [gneiss.io :as gio]))
+
+(defn churn
+  "Analyzes a file."
+  [files]
+  (map #(anal/analyze-lines :irssi %) (keep gio/load-log files)))
 
 (defn -main
   "I don't do a whole lot ... yet."
