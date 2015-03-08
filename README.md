@@ -1,5 +1,8 @@
 # Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss)
 
+<img src="https://raw.githubusercontent.com/ane/gneiss/master/gneiss.png" alt="Gneiss!"
+title="Gneiss." align="right" />
+
 Gneiss is an IRC log statistics server. It differs from traditional
 IRC statistics software by implementing a functional web server that can
 provide results over HTTP instead of generating static HTML files.
