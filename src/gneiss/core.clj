@@ -1,17 +1,10 @@
 (ns gneiss.core
-  (:require [gneiss.analyze :as anal]
-            [gneiss.io :as gio]))
+  (:require [gneiss.analyze :as anal]))
 
-(defn churn
-  "Analyzes a file."
-  [files]
-  (map #(anal/analyze-lines :irssi %) (keep gio/load-log files)))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Runs Gneiss. It's gneiss."
   [& args]
-  (println (str "I'm in " (System/getProperty "user.dir")))
-  (println "Getting some chunks!")
-  (map chunks/kakkapaska args))
+  (println "Hey hold on, I don't really do anything yet."))
 
 

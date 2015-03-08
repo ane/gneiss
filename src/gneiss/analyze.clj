@@ -2,7 +2,6 @@
   (:require [clojure.core.match :refer [match]]
             [clojure.core.reducers :as r]
             [clojure.java.io :as io]
-            [gneiss.chunks :as c]
             [gneiss.formats.irssi :as irssi]))
 
 (defn make-regular
