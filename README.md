@@ -1,36 +1,36 @@
-# gneiss
+# Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss)
 
-FIXME: description
+Gneiss is an IRC log statistics server. It differs from traditional
+IRC statistics software by implementing a functional web server that can
+provide results over HTTP instead of generating static HTML files.
+
+The API is meant to be used with any HTTP client. Currently, the idea is to
+build a simple web application that talks to Gneiss over HTTP.
+
+## Roadmap
+
+- [ ] analysis
+  - [ ] user interactions
+	- [ ] line count
+	- [x] word count
+	- [ ] kick count 
+  - [ ] time of day analysis
+  - [ ] date statistics
+- [ ] http API
+- [ ] web client (another project?)
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Currently to be determined. 
 
 ## Usage
 
-FIXME: explanation
 
     $ java -jar gneiss-0.1.0-standalone.jar [args]
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Antoine Kalmbach <ane@iki.fi>
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html).
+
