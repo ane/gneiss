@@ -1,8 +1,8 @@
-# Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss)
+# Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss) [![License: AGPL v3](https://img.shields.io/badge/license-AGPL_3-green.svg)][http://www.gnu.org/licenses/agpl-3.0.html]
 
 <img src="https://raw.githubusercontent.com/ane/gneiss/master/gneiss.png" alt="Gneiss!"
 title="Gneiss." align="right" />
-
+pp
 Gneiss is an IRC log statistics server. It differs from traditional
 IRC statistics software by implementing a functional web server that can
 provide results over HTTP instead of generating static HTML files.
@@ -14,7 +14,7 @@ build a simple web application that talks to Gneiss over HTTP.
 
 - [ ] analysis
   - [ ] user interactions
-	- [ ] line count
+	- [x] line count
 	- [x] word count
 	- [ ] kick count 
   - [ ] time of day analysis
