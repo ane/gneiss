@@ -5,6 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[acyclic/squiggly-clojure "0.1.2-SNAPSHOT"]
                  [org.clojure/core.match "0.3.0-alpha4"]
+                 ;; reducers on java 1.6
+                 [org.codehaus.jsr166-mirror/jsr166y "1.7.0"]
                  [org.clojure/clojure "1.6.0"]]
   :plugins [[lein-environ "1.0.0"]]
   :main ^:skip-aot gneiss.core
