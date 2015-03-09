@@ -1,4 +1,4 @@
-(ns gneiss.analyze
+(ns gneiss.analysis.churn
   (:require [clojure.core.match :refer [match]]
             [clojure.core.reducers :as r]
             [clojure.java.io :as io]
@@ -49,7 +49,7 @@
   (r/fold merge-stats (partial analyze-line matcher statistics) lines))
 
 
-(defn churn-file
+(defn log
   [f]
   (with-open [rdr (io/reader f)]
     (analyze-lines :irssi [:regular] (line-seq rdr))))

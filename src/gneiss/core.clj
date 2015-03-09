@@ -1,5 +1,5 @@
 (ns gneiss.core
-  (:require [gneiss.analyze :as anal]))
+  (:require [gneiss.analysis.churn :as churn]))
 
 
 (defn -main

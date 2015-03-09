@@ -1,5 +1,5 @@
-(ns gneiss.analyze-test
-  (:require [gneiss.analyze :refer :all]
+(ns gneiss.churn-test
+  (:require [gneiss.analysis.churn :refer :all]
             [clojure.test :refer :all]))
 
 (deftest matcher-creation
