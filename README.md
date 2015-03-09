@@ -3,7 +3,7 @@
 <img src="https://raw.githubusercontent.com/ane/gneiss/master/gneiss.png" alt="Gneiss!"
 title="Gneiss." align="right" />
 
-Gneiss is an IRC log statistics service. It differs from traditional
+Gneiss is an IRC log statistics server. It differs from traditional
 IRC statistics software by implementing a functional web server that can
 provide results over HTTP instead of generating static HTML files.
 
