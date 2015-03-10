@@ -1,4 +1,4 @@
-(ns gneiss.churn-test
+(ns gneiss.analysis.churn-test
   (:require [gneiss.analysis.churn :refer :all]
             [clojure.test :refer :all]))
 
@@ -46,4 +46,4 @@
 
 (deftest analyzing
   (let [res (analyze-lines :irssi [:regular] lines)]
-    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}}))))
+    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}})))),
