@@ -11,7 +11,7 @@
   [f]
   (fn [line]
     (if-let [[whole nick msg] (f line)]
-      {:regular {:nick nick :words (clojure.string/split msg #"\s")}}
+      {:nick nick :words (clojure.string/split msg #"\s")}
       nil)))
 
 (defn calculate-regular

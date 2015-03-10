@@ -14,26 +14,39 @@
     (let [{:keys [regular type]} matcher]
       {:regular (user/make-regular regular)
        :type type})))
-
+ 
 (defn compose-updaters
   "Takes functions that update a map, passes them stats as the last parameter,
   and returns a collection you can fold over."
   [stats fs]
   (map #(partial % stats) fs))
 
+(defn try-matcher
+  [line matcher-fn updaters]
+  (when-let [result (matcher-fn line)]
+    (compose-updaters result updaters)))
+
+(defn apply-matchers
+  [line matchers updaters]
+  (first
+   (filter identity
+           (map #(try-matcher line %1 %2)
+                matchers
+                updaters))))
+
 (defn analyze-line
   "Matches a log line with the matchers, using the statistics given in stats."
-  ([matcher stats] {})
-  ([matcher stats stats-map line]
-   (def select-values (comp vals select-keys))
-   (let [matcher-funcs (select-values matcher stats)]
-     (let [updaters (match [((apply some-fn matcher-funcs) line)]
-                           [{:regular stat}] (compose-updaters stat [user/update-users])
-                           :else [identity])]
-       ((apply comp updaters) stats-map)))))
+  ([matcherm stats] {})
+  ([matcherm stats stats-map line]
+   (let [matchers (vals (select-keys matcherm stats))
+         updaters (vals (select-keys {:regular [user/update-users]} stats))]
+     ((apply comp (or
+                   (apply-matchers line matchers updaters)
+                   [identity])) stats-map))))
 
-(defn merge-line-results [ev1 ev2]
+(defn merge-line-results
   "Merges two items together."
+  [ev1 ev2]
   (match [ev1 ev2]
          [(a :guard vector?) (b :guard vector?)] (vec (concat a b))
          [(a :guard integer?) (b :guard integer?)] (+ a b)
@@ -50,8 +63,7 @@
 (defn analyze-lines
   "Analyze analyzes a file using a specific format."
   [format statistics lines]
-  (def matcher (make-matcher format))
-  (r/fold merge-stats #(analyze-line matcher statistics %1 %2) lines))
+  (r/fold merge-stats #(analyze-line (make-matcher format) statistics %1 %2) lines))
 
 
 (defn log

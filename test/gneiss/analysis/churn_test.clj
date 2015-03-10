@@ -25,6 +25,7 @@
 (def lines ["14:33 < bip> hurr durr herp derp burp ;D"
             "13:39 < ding> this is a six word sentence"
             "16:13 < bip> yeah"
+            "-- this line is noise and should not match! --"
             "14:40 < bip> i had great fun trimming the hedges last night :)"
             "14:33 < ding> what the fuck is going on"])
 
@@ -40,9 +41,10 @@
       (let [stats (analyze-line matcher [:regular] {} line)]
         ;; at least some lines ought to be produced, so
         ;; use any entries you want
-        (is (some-keys? [:users
-                         :words] stats)
-            "At least some stats must be produced.")))))
+        (is (if (not-empty stats)
+              (some-keys? [:users :words] stats)
+              true)
+            "At least some stats must be produced when there is a match.")))))
 
 (deftest analyzing
   (let [res (analyze-lines :irssi [:regular] lines)]

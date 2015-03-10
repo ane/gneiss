@@ -9,5 +9,5 @@
       (is (fn? regularfn)
           "make-regular returned a function.")
       (let [sampl (regularfn "13:37 < ane> hello i am a dog")]
-        (is (= sampl {:regular {:nick "ane" :words ["hello" "i" "am" "a" "dog"]}})
+        (is (= sampl {:nick "ane" :words ["hello" "i" "am" "a" "dog"]})
             "the returned function works.")))))
