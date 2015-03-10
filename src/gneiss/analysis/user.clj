@@ -25,12 +25,14 @@
    :words (+ (:words stats) (get user :words 0))})
 
 (defn update-users
-  [stats usermap]
-  (let [{nick :nick} stats
-        change (calculate-regular stats)]
-    (if-let [user (get usermap nick)]
-      (update-in usermap [nick] update-user change)
-      (assoc usermap nick change))))
+  [statistic statsmap]
+  (let [{usermap :users} statsmap
+        {nick :nick} statistic
+        change (calculate-regular statistic)]
+    (assoc statsmap :users
+           (if-let [user (get usermap nick)]
+             (update-in usermap [nick] update-user change)
+             (assoc usermap nick change)))))
 
 
 

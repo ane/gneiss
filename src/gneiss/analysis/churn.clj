@@ -15,10 +15,10 @@
       {:regular (user/make-regular regular)
        :type type})))
 
-(defn compose-update
+(defn compose-updaters
   "Takes functions that update a map, passes them stats as the last parameter,
   and returns a collection you can fold over."
-  [stats & fs]
+  [stats fs]
   (map #(partial % stats) fs))
 
 (defn analyze-line
@@ -27,12 +27,10 @@
   ([matcher stats stats-map line]
    (def select-values (comp vals select-keys))
    (let [matcher-funcs (select-values matcher stats)]
-     (let [tester (apply some-fn matcher-funcs)]
-       (reduce
-        identity
-        (match [(tester line)]
-               [{:regular stat}] (compose-update stat identity)
-               :else [identity]))))))
+     (let [updaters (match [((apply some-fn matcher-funcs) line)]
+                           [{:regular stat}] (compose-updaters stat [user/update-users])
+                           :else [identity])]
+       ((apply comp updaters) stats-map)))))
 
 (defn merge-line-results [ev1 ev2]
   "Merges two items together."
@@ -53,7 +51,7 @@
   "Analyze analyzes a file using a specific format."
   [format statistics lines]
   (def matcher (make-matcher format))
-  (r/fold merge-stats (partial analyze-line matcher statistics) lines))
+  (r/fold merge-stats #(analyze-line matcher statistics %1 %2) lines))
 
 
 (defn log
