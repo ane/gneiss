@@ -1,7 +1,7 @@
-(ns gneiss.analysis.churn-test
+(ns gneiss.churn-test
   (:require [clojure.test :refer :all]
-            [gneiss.analysis.churn :refer :all]
-            [gneiss.analysis.user :as user]))
+            [gneiss.churn :refer :all]
+            [gneiss.regular :as user]))
 
 (deftest matcher-creation
   (doseq [mtype [:irssi]]
@@ -40,13 +40,10 @@
   (let [matcher (make-matcher :irssi)
         updaters {:regular [user/update-users]}]
     (doseq [line lines]
-      (let [stats (analyze-line matcher updaters [:regular] {} line)]
+      (when-let [stats (not-empty (analyze-line matcher updaters [:regular] {} line))]
         ;; at least some lines ought to be produced, so
         ;; use any entries you want
-        (is (if (not-empty stats)
-              (some-keys? [:users :words] stats)
-              ;; didn't match, so we don't expect anything
-              true)
+        (is (some-keys? [:users :words] stats)
             "At least some stats must be produced when there is a match.")))))
 
 (deftest analyzing

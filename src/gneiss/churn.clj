@@ -1,8 +1,8 @@
-(ns gneiss.analysis.churn
+(ns gneiss.churn
   (:require [clojure.core.match :refer [match]]
             [clojure.core.reducers :as r]
             [clojure.java.io :as io]
-            [gneiss.analysis.user :as user]
+            [gneiss.regular :as regular]
             [gneiss.formats.irssi :as irssi]))
 
 (defn make-matcher
@@ -12,7 +12,7 @@
                        [:irssi] irssi/matcher
                        :else irssi/matcher)]
     (let [{:keys [regular type]} matcher]
-      {:regular (user/make-regular regular)
+      {:regular (regular/make-regular regular)
        :type type})))
 
 (defn compose-updaters
@@ -29,15 +29,15 @@
     (compose-updaters result updater-fns)))
 
 (def updaters
-  {:regular [user/update-users]})
+  {:regular [regular/update-users]})
 
 (defn find-and-apply-matcher
   "With a log line and a statistic, gets the corresponding
   matcher and updater from the updater and matcher maps."
   [line stat matchers updaters]
-  (when-let [matcher (stat matchers)]
-    (when-let [updater (stat updaters)]
-      (try-matcher line matcher updater))))
+  (let [matcher (stat matchers)
+        updater (when matcher (stat updaters))]
+    (when updater (try-matcher line matcher updater))))
 
 (defn analyze-line
   "Given a set of matcher and updater hash-maps with keys present of that of
