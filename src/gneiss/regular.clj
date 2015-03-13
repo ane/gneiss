@@ -29,8 +29,7 @@
   (let [{usermap :users} statsmap
         {nick :nick} statistic
         change (calculate-regular statistic)]
-    (assoc-in statsmap
-              [:users nick]
+    (assoc-in statsmap [:users nick]
               (update-user
-               (or (get usermap nick) {}) change))))
+               (get usermap nick {}) change))))
 
