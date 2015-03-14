@@ -14,7 +14,7 @@
 (deftest regular-works-as-expected
   (is (=
        (regular-fn test-msg)
-       {:nick "ane" :words ["hello" "i" "am" "a" "dog." "woof!"]})))
+       {:kind :regular :nick "ane" :words ["hello" "i" "am" "a" "dog." "woof!"]})))
 
 (deftest user-update-works
   (let [stats-map {}

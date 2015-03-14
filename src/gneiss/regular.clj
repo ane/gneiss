@@ -1,6 +1,5 @@
 (ns gneiss.regular
-  (:require [clojure.core.match :refer [match]]
-            [gneiss.formats.irssi :as irssi]))
+  (:require [gneiss.formats.irssi :as irssi]))
 
 (defn make-regular
   "Makes a regular message matcher using the given matcher func.
@@ -10,9 +9,8 @@
   - the message itself following the nickname"
   [f]
   (fn [line]
-    (if-let [[whole nick msg] (f line)]
-      {:nick nick :words (clojure.string/split msg #"\s")}
-      nil)))
+    (when-let [[whole nick msg] (f line)]
+      {:kind :regular :nick nick :words (clojure.string/split msg #"\s")})))
 
 (defn calculate-regular
   "Calculates the new statistics from the words array."

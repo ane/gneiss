@@ -37,10 +37,9 @@
     ((apply some-fn preds) m)))
 
 (deftest analyzing-line
-  (let [matcher (make-matcher :irssi)
-        updaters {:regular [user/update-users]}]
+  (let [matcher (make-matcher :irssi)]
     (doseq [line lines]
-      (when-let [stats (not-empty (analyze-line matcher updaters [:regular] {} line))]
+      (when-let [stats (not-empty (analyze-line matcher [:regular] {} line))]
         ;; at least some lines ought to be produced, so
         ;; use any entries you want
         (is (some-keys? [:users :words] stats)
@@ -48,4 +47,4 @@
 
 (deftest analyzing
   (let [res (analyze-lines :irssi [:regular] lines)]
-    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}})))),
+    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}}))))
