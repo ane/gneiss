@@ -14,13 +14,16 @@
       "The default matcher is :irssi."))
 
 (deftest merging
-  (let [m1 {:users {"ane" {:words 5 :kicks ["ding"]} "esko" {:kicks ["ane"]}}}
-        m2 {:users {"esko" {:words 3} "ane" {:words 3 :kicks ["dong"]}}}
+  (let [m1 {:users {"ane" {:words 5 :kicks ["ding"]} "esko" {:kicks ["ane"]}}
+            :words {"foo" 1 "bar" 2}}
+        m2 {:users {"esko" {:words 3} "ane" {:words 3 :kicks ["dong"]}}
+            :words {"foo" 1 "baz" 9}}
         result (merge-stats m1 m2)]
     (is (= result
            {:users
             {"ane" {:words 8 :kicks ["ding" "dong"]}
-             "esko" {:words 3 :kicks ["ane"]}}})
+             "esko" {:words 3 :kicks ["ane"]}}
+            :words {"foo" 2 "bar" 2 "baz" 9}})
         "Merging should work as expected.")))
 
 (def lines ["14:33 < bip> hurr durr herp derp burp ;D"
@@ -45,6 +48,19 @@
         (is (some-keys? [:users :words] stats)
             "At least some stats must be produced when there is a match.")))))
 
+
 (deftest analyzing
   (let [res (analyze-lines :irssi [:regular] lines)]
-    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}}))))
+    (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}
+                ;; this was not fun to write
+                :words {"hurr" 1, "durr" 1, "herp" 1, "derp" 1, "burp" 1, ";D" 1,
+                        "this" 1, "is" 2, "six" 1, "word" 1, "sentence" 1,
+                        "yeah" 1, "i" 1, "had" 1, "great" 1, "fun" 1, "trimming" 1,
+                        "the" 2, "last" 1, "night" 1, ":)" 1, "what" 1,
+                        "fuck" 1, "going" 1, "on" 1, "a" 1, "hedges" 1}}))))
+
+(deftest regular-updating
+  (let [match {:kind :regular :nick "ane" :words ["yes" "this" "dog" "how" "may" "i" "help" "dog"]}
+        reg (update-results match {})]
+    (is (= reg {:users {"ane" {:words 8 :lines 1}}
+                :words {"yes" 1, "this" 1, "dog" 2, "how" 1, "may" 1, "i" 1, "help" 1}}))))

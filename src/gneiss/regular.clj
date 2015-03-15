@@ -1,5 +1,6 @@
 (ns gneiss.regular
-  (:require [gneiss.formats.irssi :as irssi]))
+  (:require [clojure.core.reducers :as r]
+            [gneiss.formats.irssi :as irssi]))
 
 (defn make-regular
   "Makes a regular message matcher using the given matcher func.
@@ -31,3 +32,18 @@
               (update-user
                (get usermap nick {}) change))))
 
+(defn count-words
+  ([] {})
+  ([stats word]
+   (assoc stats word (inc (get stats word 0)))))
+
+(defn merge-wordcounts
+  ([] {})
+  ([& m] (apply merge-with + m)))
+
+(defn update-words
+  [statistic statsmap]
+  (let [{wordsmap :words} statsmap
+        {words :words} statistic]
+    (assoc statsmap :words
+           (merge-with + wordsmap (r/fold merge-wordcounts count-words words)))))

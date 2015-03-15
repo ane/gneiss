@@ -19,7 +19,8 @@
 
 (defmethod update-results :regular
   [match stats-map]
-  ((apply comp [(partial regular/update-users match)]) stats-map))
+  ((apply comp [(partial regular/update-words match)
+                (partial regular/update-users match)]) stats-map))
 
 (defn analyze-line
   "Given a set of matcher funcs with matching statistics keys, fetches
@@ -43,7 +44,6 @@
           [clojure.lang.PersistentVector clojure.lang.PersistentVector] (into ev1 ev2)
           ;; ev1 wins if types aren't compatible
           ev1)))
-
 
 (defn merge-stats
   "Merges two statistics dictionaries."

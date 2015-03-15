@@ -5,6 +5,6 @@
 (defn -main
   "Runs Gneiss. It's gneiss."
   [& args]
-  (println "Hey hold on, I don't really do anything yet."))
+  (map churn/log args))
 
 
