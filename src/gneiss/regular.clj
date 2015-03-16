@@ -43,7 +43,7 @@
 
 (defn update-words
   [statistic statsmap]
-  (let [{wordsmap :words} statsmap
-        {words :words} statistic]
-    (assoc statsmap :words
-           (merge-with + wordsmap (r/fold merge-wordcounts count-words words)))))
+  (let [{words :words} statistic]
+    (reduce
+     (fn [m w]
+       (update-in m [:words w] (fnil inc 0))) statsmap words)))

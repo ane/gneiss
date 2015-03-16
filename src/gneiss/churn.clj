@@ -61,7 +61,22 @@
             (make-matcher format) statistics %1 %2)
           lines))
 
+(defn neither-nick-nor-short
+  "Returns true whether the word isn't a hollering, i.e., someone is
+  trying to address someone like \"< derp> john: you're so wrong!\",
+  and whether the word is longer or equal to five characters. FIXME:
+  won't add swearwords, but basic common english words could be an
+  option."
+  [word]
+  (and (>= (.length word) 5)
+       (not (.endsWith word ":"))))
+
 (defn log
-  [f]
-  (with-open [rdr (io/reader f)]
-    (analyze-lines :irssi [:regular] (line-seq rdr))))
+  "Processes the log buffer in lines, throws an exception if it isn't found."
+  [lines]
+  (let [{words :words, users :users} (analyze-lines :irssi [:regular] lines)]
+    {:words (->> words
+                 (filter (comp neither-nick-nor-short first))
+                 (sort-by val >)
+                 (take 10))
+     :users users}))

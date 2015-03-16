@@ -13,13 +13,20 @@ build a simple web application that talks to Gneiss over HTTP.
 ## Roadmap
 
 - [ ] analysis
-  - [ ] user interactions
-	- [x] line count
-	- [x] word count
-	- [ ] kick count 
-  - [ ] time of day analysis
-  - [ ] date statistics
-- [ ] http API
+    - [ ] user interactions
+        - [x] line count (how many lines spoken)
+        - [x] word count (how many words spoken)
+        - [ ] kicked and kick count 
+    - [ ] general interactions
+        - [ ] topic changes
+        - [x] word statistics (how often was word x mentioned)
+    - [ ] time-related analysis
+        - [ ] time of day analysis (busiest time of day)
+        - [ ] date statistics (lines per date)
+- [ ] config files (thinking about json) and globbing
+- [ ] http server & api
+- [ ] real-time updates
+- [ ] database storage
 - [ ] web client (another project?)
 
 ## Installation
