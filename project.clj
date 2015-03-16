@@ -12,4 +12,5 @@
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :dev {:env {:squiggly {:checkers [:eastwood]
-                                    :eastwood-exclude-linters [:unlimited-use]}}}})
+                                    :eastwood-exclude-linters [:unlimited-use]}}}
+              :cloverage {:plugins [[lein-cloverage "1.0.2"]]}})
