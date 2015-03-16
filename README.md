@@ -1,4 +1,4 @@
-# Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss) [![License: AGPL v3](https://img.shields.io/badge/license-AGPL_3-green.svg)](http://www.gnu.org/licenses/agpl-3.0.html) [![Coverage Status](https://coveralls.io/repos/ane/gneiss/badge.svg?branch=master)](https://coveralls.io/r/ane/gneiss?branch=master)
+# Gneiss [![Build Status](https://travis-ci.org/ane/gneiss.svg?branch=master)](https://travis-ci.org/ane/gneiss) [![Coverage Status](https://coveralls.io/repos/ane/gneiss/badge.svg?branch=master)](https://coveralls.io/r/ane/gneiss?branch=master)  [![License: AGPL v3](https://img.shields.io/badge/license-AGPL_3-green.svg)](http://www.gnu.org/licenses/agpl-3.0.html)
 
 <img src="https://raw.githubusercontent.com/ane/gneiss/master/gneiss.png" alt="Gneiss!"
 title="Gneiss." align="right" />
