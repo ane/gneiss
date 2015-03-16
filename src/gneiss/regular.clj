@@ -25,21 +25,9 @@
 
 (defn update-users
   [statistic statsmap]
-  (let [{usermap :users} statsmap
-        {nick :nick} statistic
+  (let [{nick :nick} statistic
         change (calculate-regular statistic)]
-    (assoc-in statsmap [:users nick]
-              (update-user
-               (get usermap nick {}) change))))
-
-(defn count-words
-  ([] {})
-  ([stats word]
-   (assoc stats word (inc (get stats word 0)))))
-
-(defn merge-wordcounts
-  ([] {})
-  ([& m] (apply merge-with + m)))
+    (update-in statsmap [:users nick] (fnil update-user {}) change)))
 
 (defn update-words
   [statistic statsmap]
