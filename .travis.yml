@@ -3,6 +3,7 @@ lein: lein2
 script: 
   - lein2 test :all
   - lein2 with-profile +cloverage cloverage --coveralls
+  - curl -F 'json_file=@target/coverage/coveralls.json' 'https://coveralls.io/api/v1/jobs'
 jdk:
   - openjdk7
   - openjdk6
