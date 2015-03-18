@@ -4,6 +4,8 @@
 
 (def sample "13:37 <@ane> hello everybody I'm using irssi")
 
+(def kick "13:37 -!- foo was kicked from #bar by Derp [lol]")
+
 (def bad-sample "ding dong the witch is dead 23:23 < tallow> for albion!")
 
 (deftest should-match
@@ -12,6 +14,10 @@
 
 (deftest should-not-match
   (is (nil? ((:regular matcher) bad-sample))))
+
+(deftest should-kick
+  (is (= ((:kick matcher) kick)
+         [kick "foo" "Derp" "lol"])))
 
 (testing "Irssi format:"
   (testing "The regexp should match a valid Irssi line."      
