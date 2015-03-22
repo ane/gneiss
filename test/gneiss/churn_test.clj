@@ -24,6 +24,7 @@
         "Merging should work as expected.")))
 
 (def lines ["14:33 < bip> hurr durr herp derp burp ;D"
+            "14:33 -!- derp was kicked from #foo by Hurr [durr!]"
             "13:39 < ding> this is a six word sentence"
             "16:13 < bip> yeah"
             "-- this line is noise and should not match! --"
@@ -39,22 +40,23 @@
 (deftest analyzing-line
   (let [matcher (make-matcher :irssi)]
     (doseq [line lines]
-      (when-let [stats (not-empty (analyze-line matcher `(m/regular) {} line))]
+      (when-let [stats (not-empty (analyze-line matcher `(m/regular m/kick) {} line))]
         ;; at least some lines ought to be produced, so
         ;; use any entries you want
-        (is (some-keys? [:users :words] stats)
+        (is (some-keys? [:users :words :kicks] stats)
             "At least some stats must be produced when there is a match.")))))
 
 
 (deftest analyzing
-  (let [res (analyze-lines (Irssi.) `(m/regular) lines)]
+  (let [res (analyze-lines (Irssi.) `(m/regular m/kick) lines)]
     (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}
                 ;; this was not fun to write
                 :words {"hurr" 1, "durr" 1, "herp" 1, "derp" 1, "burp" 1, ";D" 1,
                         "this" 1, "is" 2, "six" 1, "word" 1, "sentence" 1,
                         "yeah" 1, "i" 1, "had" 1, "great" 1, "fun" 1, "trimming" 1,
                         "the" 2, "last" 1, "night" 1, ":)" 1, "what" 1,
-                        "fuck" 1, "going" 1, "on" 1, "a" 1, "hedges" 1}}))))
+                        "fuck" 1, "going" 1, "on" 1, "a" 1, "hedges" 1}
+                :kicks {"Hurr" ["derp"]}}))))
 
 (deftest regular-updating
   (let [match {:kind :regular :nick "ane" :words ["yes" "this" "dog" "how" "may" "i" "help" "dog"]}

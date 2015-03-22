@@ -2,6 +2,7 @@
   (:require [clojure.core.reducers :as r]
             [clojure.java.io :as io]
             [gneiss.formats.matcher :as m]
+            [gneiss.kick :as kick]
             [gneiss.regular :as regular])
   (:import [gneiss.formats.irssi Irssi]))
 
@@ -19,6 +20,10 @@
   [match stats-map]
   ((apply comp [(partial regular/update-words match)
                 (partial regular/update-users match)]) stats-map))
+
+(defmethod update-results :kick
+  [match stats-map]
+  (kick/update-kicks match stats-map))
 
 (defn analyze-line
   "Given a set of matcher funcs with matching statistics keys, fetches
@@ -66,9 +71,10 @@
 (defn log
   "Processes the log buffer in lines, throws an exception if it isn't found."
   [lines]
-  (let [{words :words, users :users} (analyze-lines (Irssi.) `(m/regular) lines)]
+  (let [{words :words, users :users, kicks :kicks} (analyze-lines (Irssi.) `(m/regular m/kick) lines)]
     {:words (->> words
                  (filter (comp neither-nick-nor-short first))
                  (sort-by val >)
                  (take 10))
-     :users users}))
+     :users users
+     :kicks kicks}))
