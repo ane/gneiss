@@ -2,16 +2,6 @@
   (:require [clojure.core.reducers :as r]
             [gneiss.formats.irssi :as irssi]))
 
-(defn make-regular
-  "Makes a regular message matcher using the given matcher func.
-  f must be a function that given a log line gives at least three arguments:
-  - the whole log line
-  - the authoring nickname
-  - the message itself following the nickname"
-  [f]
-  (fn [line]
-    (when-let [[whole nick msg] (f line)]
-      {:kind :regular :nick nick :words (clojure.string/split msg #"\s")})))
 
 (defn calculate-regular
   "Calculates the new statistics from the words array."

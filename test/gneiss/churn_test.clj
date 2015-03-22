@@ -1,16 +1,13 @@
 (ns gneiss.churn-test
   (:require [clojure.test :refer :all]
             [gneiss.churn :refer :all]
-            [gneiss.regular :as user]))
+            [gneiss.formats.matcher :as m]
+            [gneiss.regular :as user])
+  (:import [gneiss.formats.irssi Irssi]))
 
-(deftest matcher-creation
-  (doseq [mtype [:irssi]]
-    (let [m (make-matcher mtype)]
-      (is (= (:type m) mtype)
-          "Matcher type is correctly defined as the :type key."))))
 
 (deftest default-matcher
-  (is (= (:type (make-matcher :foobarasdf)) :irssi)
+  (is (instance? gneiss.formats.irssi.Irssi (make-matcher :foobarasdf))
       "The default matcher is :irssi."))
 
 (deftest merging
@@ -42,7 +39,7 @@
 (deftest analyzing-line
   (let [matcher (make-matcher :irssi)]
     (doseq [line lines]
-      (when-let [stats (not-empty (analyze-line matcher [:regular] {} line))]
+      (when-let [stats (not-empty (analyze-line matcher `(m/regular) {} line))]
         ;; at least some lines ought to be produced, so
         ;; use any entries you want
         (is (some-keys? [:users :words] stats)
@@ -50,7 +47,7 @@
 
 
 (deftest analyzing
-  (let [res (analyze-lines :irssi [:regular] lines)]
+  (let [res (analyze-lines (Irssi.) `(m/regular) lines)]
     (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}
                 ;; this was not fun to write
                 :words {"hurr" 1, "durr" 1, "herp" 1, "derp" 1, "burp" 1, ";D" 1,

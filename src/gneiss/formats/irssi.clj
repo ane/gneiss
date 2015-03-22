@@ -1,4 +1,5 @@
-(ns gneiss.formats.irssi)
+(ns gneiss.formats.irssi
+  (:require [gneiss.formats.matcher :as matcher]))
 
 (def nickname #"[A-Za-z\[\]\\`_\^\{\|\}]+")
 
@@ -17,6 +18,9 @@
                             "(" nickname ")" " was kicked from " channel " by "
                             "(" nickname ") " #"\[(.*)\]")))
 
-(def matcher {:type :irssi
-              :regular (partial re-find regular?)
-              :kick (partial re-find kick?)})
+(defrecord Irssi []
+  matcher/Matcher
+  (kick [x line] (when-let [[_ kicked kicker reason] (re-find kick? line)]
+      {:kind :kick :kicked kicked :kicker kicker :reason reason}))
+  (regular [x line] (when-let [[whole nick msg] (re-find regular? line)]
+      {:kind :regular :nick nick :words (clojure.string/split msg #"\s")})))

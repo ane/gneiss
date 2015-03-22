@@ -1,18 +1,16 @@
 (ns gneiss.churn
   (:require [clojure.core.reducers :as r]
             [clojure.java.io :as io]
-            [gneiss.formats.irssi :as irssi]
-            [gneiss.regular :as regular]))
+            [gneiss.formats.matcher :as m]
+            [gneiss.regular :as regular])
+  (:import [gneiss.formats.irssi Irssi]))
 
 (defn make-matcher
   "Creates a matcher using the specific format."
   [format]
-  (let [matcher (case format
-                  :irssi irssi/matcher
-                  irssi/matcher)
-        {:keys [regular type]} matcher]
-    {:regular (regular/make-regular regular)
-     :type type}))
+  (case format
+    :irssi (Irssi.)
+    (Irssi.)))
 
 (defmulti update-results
   (fn [match stats-map] (:kind match)))
@@ -26,12 +24,9 @@
   "Given a set of matcher funcs with matching statistics keys, fetches
   a matcher func and tries to match it, and updates by calling the updater
   based on the type of the match."
-  ([matcher-fns stats] {})
-  ([matcher-fns stats stats-map line]
-   (if-let [match
-            (some identity
-                  (map (fn [stat]
-                         ((stat matcher-fns) line)) stats))]
+  ([fmt stats] {})
+  ([fmt stats stats-map line]
+   (if-let [match (some identity (map (fn [stat] ((resolve stat) fmt line)) stats))]
      (update-results match stats-map)
      stats-map)))
 
@@ -55,11 +50,8 @@
 
 (defn analyze-lines
   "Analyze analyzes a file using a specific format."
-  [format statistics lines]
-  (r/fold merge-stats
-          #(analyze-line
-            (make-matcher format) statistics %1 %2)
-          lines))
+  [matcher statistics lines]
+  (r/fold merge-stats #(analyze-line matcher statistics %1 %2) lines))
 
 (defn neither-nick-nor-short
   "Returns true whether the word isn't a hollering, i.e., someone is
@@ -74,7 +66,7 @@
 (defn log
   "Processes the log buffer in lines, throws an exception if it isn't found."
   [lines]
-  (let [{words :words, users :users} (analyze-lines :irssi [:regular] lines)]
+  (let [{words :words, users :users} (analyze-lines (Irssi.) `(m/regular) lines)]
     {:words (->> words
                  (filter (comp neither-nick-nor-short first))
                  (sort-by val >)
