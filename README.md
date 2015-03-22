@@ -4,7 +4,7 @@
 title="Gneiss, isn't it?" align="right" />
 
 
-*Gneiss* is an IRC log statistics server. It differs from traditional
+**Gneiss** is an IRC log statistics server. It differs from traditional
 IRC statistics software by implementing a functional web server that can
 provide results over HTTP instead of generating static HTML files.
 
@@ -17,7 +17,8 @@ build a simple web application that talks to Gneiss over HTTP.
 
 ## Current Status
 
-See the [wiki](https://github.com/ane/gneiss/wiki/Roadmap).
+See the [wiki](https://github.com/ane/gneiss/wiki/Roadmap). Basic analysis is implemented,
+no HTTP server functionality just yet, and storage is in-memory.
 
 ## Installation
 
