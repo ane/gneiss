@@ -19,6 +19,16 @@
         change (calculate-regular statistic)]
     (update-in statsmap [:users nick] (fnil update-user {}) change)))
 
+(defn update-social
+  [statistic statsmap]
+  (let [target (first (:words statistic))
+        source (:nick statistic)]
+    (if (and (or (.endsWith target ":") (.endsWith target ","))
+             (> (.length target) 1))
+      (let [suffixless (subs target 0 (- (.length target) 1))]
+        (update-in statsmap [:graph source suffixless] (fnil inc 0)))
+      statsmap)))
+
 (defn update-words
   [statistic statsmap]
   (let [{words :words} statistic]

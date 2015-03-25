@@ -6,6 +6,7 @@
   (:import [gneiss.formats.irssi Irssi]))
 
 (def test-msg "13:37 < ane> hello i am a dog. you are not a dog, but a cat.")
+(def test-holler "13:28 < derp> ane: you're a shitty programmer!")
 
 (deftest regular-works-as-expected
   (is (=
@@ -19,6 +20,13 @@
         changed-map (update-users statistic stats-map)]
     (is (= (get-in changed-map [:users "ane"])
            {:lines 1 :words 13}))))
+
+(deftest social-update-works
+  (let [stats-map {}
+        stat (m/regular (Irssi.) test-holler)
+        delta (update-social stat stats-map)]
+    (is (= (get-in delta [:graph "derp"])
+           {"ane" 1}))))
 
 (deftest word-update-works
   (let [stats-map {}
