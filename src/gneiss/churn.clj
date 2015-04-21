@@ -69,7 +69,7 @@
   and whether the word is longer or equal to five characters. FIXME:
   won't add swearwords, but basic common english words could be an
   option."
-  [word]
+  [^String word]
   (and (>= (.length word) 5)
        (not (.endsWith word ":"))))
 
