@@ -35,15 +35,20 @@
      (update-results match stats-map)
      stats-map)))
 
+(defn same-type?
+  [t & items]
+  (every? #(identical? t (type %1)) items))
+
 (defn merge-line-results
   "Merges two items together."
   [ev1 ev2]
-  (let [types [(type ev1) (type ev2)]]
-        (condp = types
-          [java.lang.Long java.lang.Long] (+ ev1 ev2)
-          [clojure.lang.PersistentVector clojure.lang.PersistentVector] (into ev1 ev2)
-          ;; ev1 wins if types aren't compatible
-          ev1)))
+  (let [t1 (type ev1)
+        t2 (type ev2)]
+    (cond
+      (same-type? java.lang.Long ev1 ev2)
+      (+ ev1 ev2)
+      (same-type? clojure.lang.PersistentVector ev1 ev2)
+      (into ev1 ev2))))
 
 (defn merge-stats
   "Merges two statistics dictionaries."
