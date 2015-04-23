@@ -16,10 +16,16 @@
 (defmulti update-results
   (fn [match stats-map] (:kind match)))
 
+(defn curry-match
+  [m & fns]
+  (apply comp (map (fn [f] (partial f m)) fns)))
+
 (defmethod update-results :regular
   [match stats-map]
-  ((apply comp [(partial regular/update-words match)
-                (partial regular/update-users match)]) stats-map))
+  ((curry-match match
+                #'regular/update-users
+                #'regular/update-words
+                #'regular/update-social) stats-map))
 
 (defmethod update-results :kick
   [match stats-map]
@@ -76,10 +82,9 @@
 (defn log
   "Processes the log buffer in lines, throws an exception if it isn't found."
   [lines]
-  (let [{words :words, users :users, kicks :kicks} (analyze-lines (Irssi.) `(m/regular m/kick) lines)]
-    {:words (->> words
-                 (filter (comp neither-nick-nor-short first))
-                 (sort-by val >)
-                 (take 10))
-     :users users
-     :kicks kicks}))
+  (let [result (analyze-lines (Irssi.) `(m/regular m/kick) lines)
+        words (:words result)]
+    (merge result {:words (->> words
+                               (filter (comp neither-nick-nor-short first))
+                               (sort-by val >)
+                               (take 10))})))
