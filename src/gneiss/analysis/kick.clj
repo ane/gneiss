@@ -1,4 +1,4 @@
-(ns gneiss.kick)
+(ns gneiss.analysis.kick)
 
 (defn update-kicks
   [statistic statsmap]

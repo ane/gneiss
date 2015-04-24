@@ -1,6 +1,6 @@
 (ns gneiss.core
   (:require [clojure.java.io :as io]
-            [gneiss.churn :as churn])
+            [gneiss.analysis.churn :as churn])
   (:gen-class))
 
 (defn process

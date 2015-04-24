@@ -1,9 +1,9 @@
-(ns gneiss.churn
+(ns gneiss.analysis.churn
   (:require [clojure.core.reducers :as r]
             [clojure.java.io :as io]
             [gneiss.formats.matcher :as m]
-            [gneiss.kick :as kick]
-            [gneiss.regular :as regular])
+            [gneiss.analysis.kick :as kick]
+            [gneiss.analysis.regular :as regular])
   (:import [gneiss.formats.irssi Irssi]))
 
 (defn make-matcher

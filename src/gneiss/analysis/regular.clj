@@ -1,4 +1,4 @@
-(ns gneiss.regular
+(ns gneiss.analysis.regular
   (:require [clojure.core.reducers :as r]
             [gneiss.formats.irssi :as irssi]))
 

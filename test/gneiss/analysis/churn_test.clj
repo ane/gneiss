@@ -1,8 +1,8 @@
-(ns gneiss.churn-test
+(ns gneiss.analysis.churn-test
   (:require [clojure.test :refer :all]
-            [gneiss.churn :refer :all]
+            [gneiss.analysis.churn :refer :all]
             [gneiss.formats.matcher :as m]
-            [gneiss.regular :as user])
+            [gneiss.analysis.regular :as user])
   (:import [gneiss.formats.irssi Irssi]))
 
 

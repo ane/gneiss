@@ -1,8 +1,8 @@
-(ns gneiss.regular-test
+(ns gneiss.analysis.regular-test
   (:require [clojure.test :refer :all]
             [gneiss.formats.irssi :as irssi]
             [gneiss.formats.matcher :as m]
-            [gneiss.regular :refer :all])
+            [gneiss.analysis.regular :refer :all])
   (:import [gneiss.formats.irssi Irssi]))
 
 (def test-msg "13:37 < ane> hello i am a dog. you are not a dog, but a cat.")
