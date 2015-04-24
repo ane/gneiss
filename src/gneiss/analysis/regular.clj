@@ -2,22 +2,13 @@
   (:require [clojure.core.reducers :as r]
             [gneiss.formats.irssi :as irssi]))
 
-
-(defn calculate-regular
-  "Calculates the new statistics from the words array."
-  [stats]
-  {:words (count (:words stats))})
-
 (defn update-user
-  [user stats]
-  {:lines (inc (or (:lines user) 0))
-   :words (+ (:words stats) (get user :words 0))})
+  [{:keys [lines words] :or {lines 0 words 0}} stats]
+  {:lines (inc lines) :words (+ words (:words stats))})
 
 (defn update-users
-  [statistic statsmap]
-  (let [{nick :nick} statistic
-        change (calculate-regular statistic)]
-    (update-in statsmap [:users nick] (fnil update-user {}) change)))
+  [{:keys [nick words]} statsmap]
+  (update-in statsmap [:users nick] (fnil update-user {}) {:words (count words)}))
 
 (defn update-social
   [statistic statsmap]
