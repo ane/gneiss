@@ -1,10 +1,10 @@
 (ns gneiss.analysis.churn
   (:require [clojure.core.reducers :as r]
             [clojure.java.io :as io]
-            [gneiss.formats.matcher :as m]
             [gneiss.analysis.kick :as kick]
-            [gneiss.analysis.regular :as regular])
-  (:import [gneiss.formats.irssi Irssi]))
+            [gneiss.analysis.regular :as regular]
+            [gneiss.formats.matcher :as m]
+            [gneiss.formats.irssi :refer [->Irssi]]))
 
 (defn make-matcher
   "Creates a matcher using the specific format."
@@ -80,7 +80,7 @@
 (defn log
   "Processes the log buffer in lines, throws an exception if it isn't found."
   [lines]
-  (let [result (analyze-lines (Irssi.) `(m/regular m/kick) lines)
+  (let [result (analyze-lines (->Irssi) `(m/regular m/kick) lines)
         words (:words result)]
     (merge result {:words (->> words
                                (filter (comp neither-nick-nor-short first))
