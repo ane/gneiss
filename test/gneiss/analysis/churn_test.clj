@@ -5,11 +5,6 @@
             [gneiss.analysis.regular :as user])
   (:import [gneiss.formats.irssi Irssi]))
 
-
-(deftest default-matcher
-  (is (instance? gneiss.formats.irssi.Irssi (make-matcher :foobarasdf))
-      "The default matcher is :irssi."))
-
 (deftest merging
   (let [m1 {:users {"ane" {:words 5 :kicks ["ding"]} "esko" {:kicks ["ane"]}}
             :words {"foo" 1 "bar" 2}}

@@ -6,13 +6,6 @@
             [gneiss.formats.matcher :as m]
             [gneiss.formats.irssi :refer [->Irssi]]))
 
-(defn make-matcher
-  "Creates a matcher using the specific format."
-  [format]
-  (case format
-    :irssi (Irssi.)
-    (Irssi.)))
-
 (defmulti update-results
   (fn [match stats-map] (:kind match)))
 
