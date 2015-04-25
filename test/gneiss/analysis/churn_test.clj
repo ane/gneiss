@@ -1,9 +1,9 @@
 (ns gneiss.analysis.churn-test
   (:require [clojure.test :refer :all]
             [gneiss.analysis.churn :refer :all]
-            [gneiss.formats.matcher :as m]
-            [gneiss.analysis.regular :as user])
-  (:import [gneiss.formats.irssi Irssi]))
+            [gneiss.analysis.regular :as user]
+            [gneiss.formats.irssi :refer [->Irssi]]
+            [gneiss.formats.matcher :as m]))
 
 (deftest merging
   (let [m1 {:users {"ane" {:words 5 :kicks ["ding"]} "esko" {:kicks ["ane"]}}
@@ -33,7 +33,7 @@
     ((apply some-fn preds) m)))
 
 (deftest analyzing-line
-  (let [matcher (make-matcher :irssi)]
+  (let [matcher (->Irssi)]
     (doseq [line lines]
       (when-let [stats (not-empty (analyze-line matcher `(m/regular m/kick) {} line))]
         ;; at least some lines ought to be produced, so
@@ -43,7 +43,7 @@
 
 
 (deftest analyzing
-  (let [res (analyze-lines (Irssi.) `(m/regular m/kick) lines)]
+  (let [res (analyze-lines (->Irssi) `(m/regular m/kick) lines)]
     (is (= res {:users {"bip" {:words 17 :lines 3}, "ding" {:words 12 :lines 2}}
                 ;; this was not fun to write
                 :words {"hurr" 1, "durr" 1, "herp" 1, "derp" 1, "burp" 1, ";D" 1,
