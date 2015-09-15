@@ -58,3 +58,8 @@
         reg (update-results match {})]
     (is (= reg {:users {"ane" {:words 8 :lines 1}}
                 :words {"yes" 1, "this" 1, "dog" 2, "how" 1, "may" 1, "i" 1, "help" 1}}))))
+
+(deftest processing
+  (let [result (process-buffer lines (->Irssi))]
+    (is (= (get-in result [:users "bip"])
+           {:words 17 :lines 3}))))

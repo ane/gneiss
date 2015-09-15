@@ -1,10 +1,10 @@
 (ns gneiss.analysis.churn
   (:require [clojure.core.reducers :as r]
-            [clojure.java.io :as io]
-            [gneiss.analysis.kick :as kick]
-            [gneiss.analysis.regular :as regular]
+            [gneiss.analysis
+             [kick :as kick]
+             [regular :as regular]]
             [gneiss.formats.matcher :as m]
-            [gneiss.formats.irssi :refer [->Irssi]]))
+            [gneiss.protocols :as p]))
 
 (defmulti update-results
   (fn [match stats-map] (:kind match)))
@@ -29,7 +29,7 @@
   a matcher func and tries to match it, and updates by calling the updater
   based on the type of the match."
   ([fmt stats] {})
-  ([fmt stats stats-map line]
+  ([fmt stats ^clojure.lang.IPersistentMap stats-map ^String line]
    (if-let [match (some identity (map (fn [stat] ((resolve stat) fmt line)) stats))]
      (update-results match stats-map)
      stats-map)))
@@ -70,12 +70,15 @@
   (and (>= (.length word) 5)
        (not (.endsWith word ":"))))
 
-(defn log
-  "Processes the log buffer in lines, throws an exception if it isn't found."
-  [lines]
-  (let [result (analyze-lines (->Irssi) `(m/regular m/kick) lines)
-        words (:words result)]
-    (merge result {:words (->> words
+(defn process-buffer
+  "Processes the log buffer in lines using the matcher matcher, throws an exception if it isn't found."
+  [lines matcher]
+  (let [result (analyze-lines matcher `(m/regular m/kick) lines)]
+    (merge result {:words (->> (:words result)
                                (filter (comp neither-nick-nor-short first))
                                (sort-by val >)
                                (take 10))})))
+
+(deftype Churner [matcher]
+  p/Analyzer
+  (analyze-buffer [self lines] (process-buffer lines matcher)))

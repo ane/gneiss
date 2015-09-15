@@ -1,18 +1,19 @@
 (ns gneiss.core
   (:require [clojure.java.io :as io]
-            [gneiss.analysis.churn :as churn])
-  (:gen-class))
+            [gneiss.analysis.churn :refer [->Churner]]
+            [gneiss.formats.irssi :refer [->Irssi]]
+            [gneiss.protocols :refer [analyze-buffer]]))
 
 (defn process
-  [file]
+  [analyzer file]
   (with-open [rdr (io/reader file)]
-    (churn/log (line-seq rdr))))
+    (analyze-buffer analyzer (line-seq rdr))))
 
 (defn -main
   "Runs Gneiss. It's gneiss."
   [& args]
   (println "Gneiss started!")
   (doseq [f args]
-    (println (process f))))
+    (println (process (->Churner (->Irssi)) f))))
 
 
