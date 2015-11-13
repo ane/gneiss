@@ -34,26 +34,29 @@
      (update-results match stats-map)
      stats-map)))
 
-(defn merge-line-results
+(defmulti merge-line-results
   "Merges two items together."
-  [ev1 ev2]
-  (let [t1 (type ev1)
-        t2 (type ev2)]
-    (cond
-      (and (identical? t1 java.lang.Long)
-           (identical? t2 java.lang.Long))
-      (+ ev1 ev2)
-      (and (identical? t1 clojure.lang.PersistentVector)
-           (identical? t2 clojure.lang.PersistentVector))
-      (into ev1 ev2))))
+  (fn [x y]
+    [(type x) (type y)]))
+
+(defmethod merge-line-results [Long Long]
+  [x y]
+  (+ x y))
+
+(defmethod merge-line-results [clojure.lang.PersistentVector clojure.lang.PersistentVector]
+  [v1 v2]
+  (into v1 v2))
 
 (defn merge-stats
   "Merges two statistics dictionaries."
   ([] {})  
   ([& m]
-   (if (every? map? m)
-     (apply merge-with merge-stats m)
-     (apply merge-line-results m))))
+   (try
+     (if (every? map? m)
+      (apply merge-with merge-stats m)
+      (apply merge-line-results m))
+     (catch IllegalArgumentException e
+       (first m)))))
 
 (defn analyze-lines
   "Analyze analyzes a file using a specific format."
@@ -81,4 +84,5 @@
 
 (deftype Churner [matcher]
   p/Analyzer
+  (merge-statistics [self s1 s2] (merge-stats s1 s2))
   (analyze-buffer [self lines] (process-buffer lines matcher)))
