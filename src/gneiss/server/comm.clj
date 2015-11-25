@@ -1,23 +1,28 @@
 (ns gneiss.server.comm
-  (:require [clojure.core.async :refer [<! chan >!! go-loop]]
+  (:require [clojure.core.async :refer [<! go-loop]]
             [gneiss.protocols
              :refer
-             [get-stats merge-statistics set-stats Storage]]))
+             [analyze-buffer Analyzer get-stats merge-statistics set-stats Storage]]))
 
-(defn make-in-memory [churner store]
+(defn make-in-memory
+  "Creates an in-memory storage that uses the churner and stores
+   the data in just a simple ref in store."
+  [churner store]
+  (assert (satisfies? Analyzer churner) "Must be an Analyzer")
   (reify Storage
     (get-stats [self] (deref store))
-    (set-stats [self state]
+    (set-stats [self state update-fn]
       (dosync
-       (let [current-state (deref store)]
+       (let [current-state @store]
          (println "merging" current-state "with" state)
-         (ref-set store
-                  (merge-statistics churner current-state state)))))))
+         (ref-set store (update-fn current-state state)))))))
 
-(defn listen-for-stats
+(defn listen-for-lines
   "Listens for incoming stats from c and pushes them into storage."
-  [storage ch]
+  [storage churner ch]
   (go-loop []
-    (when-let [v (<! ch)]
-      (when (set-stats storage v)
-        (recur)))))
+    (when-let [lines (<! ch)]
+      (let [processed (analyze-buffer churner lines)]
+         (set-stats storage processed
+                    (fn [old new]
+                      (merge-statistics churner old new)))))))

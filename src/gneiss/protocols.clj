@@ -9,4 +9,5 @@
   "A storage keeps the statistical state in storage,
   you can retrieve state and also store a new one."
   (get-stats [self])
-  (set-stats [self state]))
+  (set-stats [self state update-fn]))
+
