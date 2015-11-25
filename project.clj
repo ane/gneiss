@@ -1,10 +1,9 @@
 (defproject gneiss "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "it's gneiss"
+  :url "https://github.com/ane/gneiss"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[acyclic/squiggly-clojure "0.1.2-SNAPSHOT"]
-                 ;; reducers on java 1.6
+  :dependencies [;; reducers on java 1.6
                  [org.codehaus.jsr166-mirror/jsr166y "1.7.0"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [org.clojure/clojure "1.7.0"]]

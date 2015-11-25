@@ -30,7 +30,7 @@ Not yet. Clone the repo and run the tests, or something.
 
 ## License
 
-Copyright © 2015 Antoine Kalmbach <ane@iki.fi>
+Gneiss is free software, distributed under the [Eclipse Public License](https://www.eclipse.org/legal/epl-v10.html).
 
-Distributed under the [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html).
+Copyright © 2015 Antoine Kalmbach <ane@iki.fi>
 
